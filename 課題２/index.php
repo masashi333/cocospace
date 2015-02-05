@@ -6,10 +6,15 @@ function h($s){
 }
 //リクエストが投稿の時
 if($_SERVER['REQUEST_METHOD']=='POST' &&
-	isset($_POST['submit_input'])){
+	isset($_POST['submit_input'])&&
+	$_POST['message']!="" &&
+	$_POST['password_input']!=""){
 	//必要な変数確保
 	$user = $_POST['user'];
 	$message = $_POST['message'];
+	if($user==""){
+		$user="名無しさん";
+	}
 	//投稿番号の初期値
 	$number=1;
 	//投稿番号の最新を取得
@@ -22,8 +27,10 @@ if($_SERVER['REQUEST_METHOD']=='POST' &&
 	}
 	//投稿時間の取得
 	$postedAt = date('Y-m-d H:i:s');
+	//パスワードの取得
+	$password = $_POST['password_input'];
 	//ファイルに保存する形式
-	$newData = $number . "<>" . $user . "<>" . $message . "<>" . $postedAt . "\n";
+	$newData = $number . "<>" . $user . "<>" . $message . "<>" . $postedAt . "<>" . $password .  "\n";
 	//ファイルを開く
 	$fp = fopen($dataFile,'a');
 	//ファイルにデータを書き込む
@@ -33,7 +40,8 @@ if($_SERVER['REQUEST_METHOD']=='POST' &&
 }
 //リクエストが削除の時
 if($_SERVER['REQUEST_METHOD']=='POST'&&
-	isset($_POST['delete_number'])){
+	isset($_POST['delete_number']) &&
+	$_POST['password_delete']!=""){
 	//ファイルを読み込んで、新しい順番に並び替え
 	$posts = file($dataFile,FILE_IGNORE_NEW_LINES);
 	// ファイルオープン
@@ -44,10 +52,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&
 	fseek($fp, 0);
 	fclose($fp);
 	foreach ($posts as $post){
-		list($number,$user,$message,$postedAt) = explode("<>",$post) ;
-		if($_POST['delete_number']!= $number){
+		list($number,$user,$message,$postedAt,$password) = explode("<>",$post) ;
+		if($_POST['delete_number'] == $number && $_POST['password_delete'] == $password){
+		}else{
 			//ファイルに保存する形式
-			$newData = $number. "<>" . $user . "<>" . $message . "<>" . $postedAt. "\n";
+			$newData = $number. "<>" . $user . "<>" . $message . "<>" . $postedAt. "<>".$password ."\n";
 			//ファイルを開く
 			$fp = fopen($dataFile,'a');
 			//ファイルにデータを書き込む
@@ -59,12 +68,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&
 }
 //リクエストが編集
 if($_SERVER['REQUEST_METHOD']=='POST'&&
-	isset($_POST['edit_number'])){
+	isset($_POST['submit_edit']) &&
+	$_POST['password_edit']!=""){
 	//ファイルを読み込んで、新しい順番に並び替え
 	$posts = file($dataFile,FILE_IGNORE_NEW_LINES);
 	foreach ($posts as $post){
-		list($number,$user,$message,$postedAt) = explode("<>",$post) ;
-		if($_POST['edit_number']== $number){
+		list($number,$user,$message,$postedAt,$password) = explode("<>",$post) ;
+		if($_POST['edit_number'] == $number && $_POST['password_edit'] == $password){
 			//編集する項目の変数確保
 			$edit_user = $user;
 			$edit_message = $message;
@@ -73,34 +83,34 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&
 }
 //リクエストが投稿で編集モードの時
 if($_SERVER['REQUEST_METHOD']=='POST'&&
-	isset($_POST['edit_mode'])){
+	isset($_POST['edit_mode']) &&
+	$_POST['password_input']!=""){
 	$edit_user = $_POST['user'];
 	$edit_message = $_POST['message'];
 	$edit_number = $_POST['edit_mode'];
 	//ファイルを読み込んで、新しい順番に並び替え
 	$posts = file($dataFile,FILE_IGNORE_NEW_LINES);
-	print_r($posts);
-	echo "\n";
 	//投稿時間の取得
 	$postedAt = date('Y-m-d H:i:s');
 	//配列の番号を取得するための変数
 	$i=0;
-	echo $edit_number ."\n";
 	foreach ($posts as $post){
-		list($number,$user,$message,$postedAt) = explode("<>",$post) ;
-		if($edit_number == $number){
-			$posts[$i] = $edit_number. "<>" . $edit_user . "<>" . $edit_message . "<>" . $postedAt. "\n";
+		list($number,$user,$message,$postedAt,$password) = explode("<>",$post) ;
+		if($edit_number == $number && $_POST['password_input'] == $password){
+			$posts[$i] = $edit_number. "<>" . $edit_user . "<>" . $edit_message . "<>" . $postedAt."<>".$password;
 		}
 		$i++;
 	}
-	print_r($posts);
-	// ファイルを中身を削除し、上書き保存
+	// ファイルを中身を削除
 	$fp = fopen($dataFile, 'r+');
 	ftruncate($fp, 0);
 	fseek($fp, 0);
-	foreach($posts as $post){
-		fwrite($fp,$post);
-	}
+	fclose($fp);
+	//上書き保存
+	$fp = fopen($dataFile,'a');
+	//fputsは指定したファイルに文字列を書き込む
+	//implodeは配列を要素ごとに指定した連結文字でつなぐ
+	fputs($fp,implode("\n",$posts)."\n");//最後の\nは最後の要素を書いた時に改行を入れるため
 	fclose($fp);
 }
 //配列に格納
@@ -117,33 +127,37 @@ $posts = array_reverse($posts);
 <body>
 	<h1>簡易掲示板</h1>
 	<form action="" method="post">
-		<?php if(isset($edit_user)):?>
-			message:<input type="text" name="message" value="<?php echo $edit_message;?>">
-			user:<input type="text" name="user" value="<?php echo $edit_message;?>">
-			<input type="submit" name="submit_edit" value="投稿">
-			<input type="hidden" name="edit_mode" value=<?php $edit_number;?>>
+		<?php if(isset($_POST['submit_edit'])):?>
+			メッセージ:<input type="text" name="message" value="<?php echo $edit_message;?>">
+			ユーザー:<input type="text" name="user" value="<?php echo $edit_user;?>">
+			パスワード:<input type="password" name="password_input">
+			<input type="submit" value="投稿">
+			<input type="hidden" name="edit_mode" value="<?=h($edit_number)?>">
 		<?php else:?>
-			message:<input type="text" name="message">
-			user:<input type="text" name="user">
+			メッセージ:<input type="text" name="message">
+			ユーザー:<input type="text" name="user">
+			パスワード:<input type="password" name="password_input">
 			<input type="submit" name="submit_input" value="投稿">
 		<?php endif;?>
 	</form>
 	<h2>削除対象番号</h2>
 	<form action="" method="post">
 		削除番号:<input type="text" name="delete_number">
+		パスワード:<input type="password" name="password_delete">
 		<input type="submit" name="submit_delete" value="削除番号送信">
 	</form>
 	</form>
 	<h2>編集対象番号</h2>
 	<form action="" method="post">
 		編集番号:<input type="text" name="edit_number">
+		パスワード:<input type="password" name="password_edit">
 		<input type="submit" name="submit_edit" value="編集番号送信">
 	</form>
 	<h2>投稿一覧（<?php echo count($posts); ?>件）</h2>
 	<ul>
 		<?php if(count($posts)) :?>
 			<?php foreach ($posts as $post) :?>
-			<?php list($number,$user,$message,$postedAt) = explode("<>",$post) ; ?>
+			<?php list($number,$user,$message,$postedAt,$password) = explode("<>",$post) ; ?>
 			<li><?php echo "投稿番号：",h($number);?> <?php echo "ユーザー：",h($user);?> <?php echo "コメント：",h($message);?> - <?php echo h($postedAt);?></li>
 			<?php endforeach; ?>
 		<?php else :?>
