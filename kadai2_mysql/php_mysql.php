@@ -106,7 +106,7 @@ while ($data = mysql_fetch_array($quryset)){
         //列２を出力//////////////
         echo "<TD>" . $data[1];
         echo "</TD>";
-		//列3を出力//////////////
+        //列3を出力//////////////
         echo "<TD>" . $data[2];
         echo "</TD>";
         //列4を出力//////////////
