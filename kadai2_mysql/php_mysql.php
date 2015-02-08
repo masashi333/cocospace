@@ -65,11 +65,11 @@ if (!$result_flag) {
     die('UPDATEクエリーが失敗しました。'.mysql_error());
 }
 
-print('<p>データを削除します。</p>');
+/*print('<p>データを削除します。</p>');
 
 $Comment_number = 1;
 
-$sql = sprintf("DELETE FROM Comment_data WHERE Comment_number = %s"
+$sql = sprintf("DELETE FROM bbs_data "
          , quote_smart($Comment_number));
 
 $result_flag = mysql_query($sql);
@@ -79,11 +79,11 @@ if (!$result_flag) {
 }
 
 print('<p>削除後のデータを取得します。</p>');
-
+*/
 
 print('<p>更新後のデータを取得します。</p>');
 //SQL文をセット/////////////////////////////////////////////
-$quryset = mysql_query("SELECT * FROM Comment_data;");
+$quryset = mysql_query("SELECT * FROM bbs_data ORDER BY Comment_number DESC");
 
 echo "<TABLE  border='1' >";
 echo "<TR>";
