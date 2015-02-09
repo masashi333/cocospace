@@ -1,0 +1,78 @@
+-- MySQL dump 10.11
+--
+-- Host: localhost    Database: co_67_3919_com
+-- ------------------------------------------------------
+-- Server version	5.1.47-ndb-7.1.5-cluster-gpl-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Comment_data`
+--
+
+DROP TABLE IF EXISTS `Comment_data`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `Comment_data` (
+  `Comment_number` int(11) DEFAULT NULL,
+  `User` char(30) DEFAULT NULL,
+  `Comment` char(200) DEFAULT NULL,
+  `Time` char(50) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `Comment_data`
+--
+
+LOCK TABLES `Comment_data` WRITE;
+/*!40000 ALTER TABLE `Comment_data` DISABLE KEYS */;
+INSERT INTO `Comment_data` VALUES (1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分'),(1,'masashi','Hello World!','16時33分');
+/*!40000 ALTER TABLE `Comment_data` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bbs_data`
+--
+
+DROP TABLE IF EXISTS `bbs_data`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `bbs_data` (
+  `Comment_number` int(11) DEFAULT NULL,
+  `User` char(30) DEFAULT NULL,
+  `Comment` char(200) DEFAULT NULL,
+  `Time` char(50) DEFAULT NULL,
+  `Password` char(50) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `bbs_data`
+--
+
+LOCK TABLES `bbs_data` WRITE;
+/*!40000 ALTER TABLE `bbs_data` DISABLE KEYS */;
+INSERT INTO `bbs_data` VALUES (6,'まさし','えりか','2015-02-08 17:39:29','zgmfx09a'),(2,'a','a','2015-02-08 17:03:25','zgmfx09a'),(7,'えりか','えりか','2015-02-09 00:26:51','zgmfx09a'),(4,'a','a','2015-02-08 17:03:39','zgmfx09a'),(5,'a','a','2015-02-08 17:16:49','zgmfx09a'),(8,'a','a','2015-02-09 01:52:36','zgmfx09a'),(9,'a','a','2015-02-09 01:54:02','zgmfx09a'),(10,'えりか','えりか','2015-02-09 02:10:08','zgmfx09a'),(11,'えりか','まさし','2015-02-09 02:10:40','zgmfx09a');
+/*!40000 ALTER TABLE `bbs_data` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-02-08 17:25:47

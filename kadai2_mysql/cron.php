@@ -5,7 +5,7 @@ $dbPass = "qTbEEOwCT";
 $dbName = "co_67_3919_com";
 
 
-//mysqlへの接続確認
+/*//mysqlへの接続確認
 $link = mysql_connect('localhost', 'co-67.3919.com', 'qTbEEOwCT');
 if (!$link) {
     die('接続失敗です。'.mysql_error());
@@ -16,13 +16,15 @@ print('<p>接続に成功しました。</p>');
 // MySQLに対する処理
 
 //データベースを選ぶ
-mysql_select_db('co_67_3919_com') or die("データベースを選ぶのに失敗しました。" . mysql_error());
+mysql_select_db('co_67_3919_com') or die("データベースを選ぶのに失敗しました。" . mysql_error());*/
 
 $filePath = "/home";
-$fileName = date('ymd').'_'.date('His').'.sql';
-$command = "/usr/local/bin/mysqldump ".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." > ".$filePath.$fileName;
+$fileName = "backup_file";
+$command = "mysqldump ".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." > ".$fileName;
 echo $command;
-system($command);
+exec($command,$out,$ret);
+print_r($out);
+var_dump($ret);
 /*
      * 毎月/毎週/毎日 実行されるコマンドを cron に登録する
      *
@@ -33,16 +35,22 @@ system($command);
      * $command:    実行するコマンド
      */
 $frequency = "DAY";
-$time = "18:39";
+$time = "2:11";
 /* cron への登録 */
-if($cron = popen("/usr/bin/crontab -", "w")){
-	fputs($cron, _cronline($date, $time, $dayofweek, $frequency, $command));
-
+if($cron = popen("crontab -", "w")){
+	while ($line = fgets($cron)) {
+		echo "$line<br />";
+	}
+	if(!fwrite($cron, _cronline($date, $time, $dayofweek, $frequency, $command))){
+		echo "書き込みできませんでした。";
+	}
+	echo "オープンできたよ！！";
+	echo _cronline($date,$time,$dayofweek,$frequency,$command);
 	pclose($cron);
 }
 
 /* crontab に登録する行情報を生成 */
-function    _cronline($date, $time, $dayofweek, $frequency, $command)
+function _cronline($date, $time, $dayofweek, $frequency, $command)
 {
 
 	$name = array(
