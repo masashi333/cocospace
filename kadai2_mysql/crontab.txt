@@ -1,1 +1,1 @@
-2 * * * * cd /home/co-67.3919.com/public_html/kadai2_mysql && mysqldump co_67_3919_com --host=localhost --user=co-67.3919.com --password=qTbEEOwCT > backup_file
+1 * * * * /usr/local/bin/php /home/co-67.3919.com/public_html/kadai2_mysql/backup.php > /home/co-67.3919.com/public_html/kadai2_mysql/log.txt 2>&1

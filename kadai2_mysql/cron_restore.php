@@ -17,10 +17,10 @@ print('<p>接続に成功しました。</p>');
 
 //データベースを選ぶ
 mysql_select_db('co_67_3919_com') or die("データベースを選ぶのに失敗しました。" . mysql_error());
-$filePath = "/home";
-$fileName = "backup_file";
+//時間の取得
+$postedAt = date('Y-m-d');
+$fileName = $postedAt;
 $command = "mysql ".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." <".$fileName;
 echo $command;
 exec($command, $output, $return_var);
 var_dump($output, $return_var);
-

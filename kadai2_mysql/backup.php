@@ -20,9 +20,10 @@ print('<p>接続に成功しました。</p>');
 //データベースを選ぶ
 mysql_select_db('co_67_3919_com') or die("データベースを選ぶのに失敗しました。" . mysql_error());
 
-$filePath = "/home";
-$fileName = "backup_file";
-$command = "/home/co-67.3919.com/public_html/kadai2_mysql/mysqldump".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." > ".$fileName;
+//投稿時間の取得
+$postedAt = date('Y-m-d');
+$fileName = $postedAt;
+$command = "cd /home/co-67.3919.com/public_html/kadai2_mysql && mysqldump ".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." > ".$fileName;
 echo $command;
 exec($command,$out,$ret);
 print_r($out);

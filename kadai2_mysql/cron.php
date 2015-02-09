@@ -5,6 +5,8 @@ $dbPass = "qTbEEOwCT";
 $dbName = "co_67_3919_com";
 
 
+
+
 /*//mysqlへの接続確認
 $link = mysql_connect('localhost', 'co-67.3919.com', 'qTbEEOwCT');
 if (!$link) {
@@ -22,9 +24,18 @@ $filePath = "/home";
 $fileName = "backup_file";
 $command = "mysqldump ".$dbName." --host=".$dbHost." --user=".$dbUser." --password=".$dbPass." > ".$fileName;
 echo $command;
-exec($command,$out,$ret);
+exec("ls",$out,$ret);
 print_r($out);
 var_dump($ret);
+exec("crontab -l",$out2,$ret2);
+print_r($out2);
+var_dump($ret2);
+exec("ls",$out3,$ret3);
+print_r($out3);
+var_dump($ret3);
+/*exec("ls /var/spool/cron/",$out4,$ret4);
+print_r($out4);
+var_dump($ret4);*/
 /*
      * 毎月/毎週/毎日 実行されるコマンドを cron に登録する
      *
@@ -34,20 +45,23 @@ var_dump($ret);
      * $frequency:  実行の頻度 ("MONTH" | "WEEK" | "DAY")
      * $command:    実行するコマンド
      */
+
 $frequency = "DAY";
-$time = "2:11";
+$time = "00:05";
+$command = "/usr/local/bin/php /home/co-67.3919.com/public_html/kadai2_mysql/backup.php ".">"." /home/co-67.3919.com/public_html/kadai2_mysql/log.txt 2>&1 ";
 /* cron への登録 */
-if($cron = popen("crontab -", "w")){
+if($cron = popen("/usr/bin/crontab -", "w")){
 	while ($line = fgets($cron)) {
 		echo "$line<br />";
 	}
-	if(!fwrite($cron, _cronline($date, $time, $dayofweek, $frequency, $command))){
-		echo "書き込みできませんでした。";
-	}
+	fwrite($cron, _cronline($date, $time, $dayofweek, $frequency, $command));
 	echo "オープンできたよ！！";
 	echo _cronline($date,$time,$dayofweek,$frequency,$command);
 	pclose($cron);
 }
+/*exec("crontab /home/co-67.3919.com/public_html/kadai2_mysql/crontab.txt",$out4,$ret4);
+print_r($out4);
+var_dump($ret4);*/
 
 /* crontab に登録する行情報を生成 */
 function _cronline($date, $time, $dayofweek, $frequency, $command)

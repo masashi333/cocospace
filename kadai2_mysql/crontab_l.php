@@ -1,5 +1,5 @@
 <?php
-exec("/etc/cron status",$out,$ret);
+exec("chkconfig --list crond",$out,$ret);
 print_r($out);
 var_dump($ret);
 exec("crontab -l",$out2,$ret2);
