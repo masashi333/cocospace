@@ -1,9 +1,11 @@
 <?php
 
+include '/home/co-67.3919.com/public_html/kadai3/kadai3-2.php'; //認証スクリプトの呼び出し
+
 function h($s){
 	return htmlspecialchars($s,ENT_QUOTES,'UTF-8');
 }
-//エスケープ関数
+/*//エスケープ関数
 function quote_smart($value)
 {
     // 数値以外をクオートする
@@ -11,7 +13,7 @@ function quote_smart($value)
 		$value = "'" . mysql_real_escape_string($value) . "'";
 	}
 	return $value;
-}
+}*/
 //mysqlへの接続確認
 $link = mysql_connect('localhost', 'co-67.3919.com', 'qTbEEOwCT');
 if (!$link) {
@@ -124,6 +126,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'&&
 		}
 	}
 }
+//ログアウトボタンが押されたらログアウトする。
+if($_SERVER['REQUEST_METHOD']=='POST'&&
+	isset($_POST['submit_logout'])){
+
+	session_off();
+}
 //mysqlの行数をカウント
 $sql = "SELECT  COUNT(*) FROM bbs_data";
 $result_flag = mysql_query($sql);
@@ -151,7 +159,7 @@ if (!$quryset) { die("SQL文が発行できへんぞ？"); }
 			<input type="hidden" name="edit_mode" value="<?=h($edit_number)?>">
 		<?php else:?>
 			メッセージ:<input type="text" name="message">
-			ユーザー:<input type="text" name="user">
+			ユーザー:<input type="text" name="user" value="<?php echo $GLOBALS['id'];?>">
 			パスワード:<input type="password" name="password_input">
 			<input type="submit" name="submit_input" value="投稿">
 		<?php endif;?>
@@ -168,6 +176,9 @@ if (!$quryset) { die("SQL文が発行できへんぞ？"); }
 		編集番号:<input type="text" name="edit_number">
 		パスワード:<input type="password" name="password_edit">
 		<input type="submit" name="submit_edit" value="編集番号送信">
+	</form>
+	<form action="" method="post">
+		<input type="submit" name="submit_logout" value="ログアウト">
 	</form>
 	<h2>投稿一覧（<?php echo $data_count; ?>件）</h2>
 	<ul>
