@@ -21,7 +21,9 @@ if($_POST['password']!="" &&
 	$mail = $_POST['mail'];
 	//IDを生成
 	$id = uniqid();
-
+	//timeを取得
+	$time = date('Y-m-d H:i:s');
+	$register_flag = 0; //仮登録フラグをたてる
 	//mysqlへの接続確認
 	$link = mysql_connect('localhost', 'co-67.3919.com', 'qTbEEOwCT');
 	if (!$link) {
@@ -41,20 +43,32 @@ if($_POST['password']!="" &&
 	}
 	extend_db();
 		//ユーザー情報を保存
-	$sql = sprintf("INSERT INTO user_data(Id,Password) VALUES(%s,%s)",quote_smart($id),quote_smart($password));
+	$sql = sprintf("INSERT INTO user_data(Id,Password,Adress,Register_flag,Time) VALUES(%s,%s,%s,%s,%s)",quote_smart($id),quote_smart($password),quote_smart($mail),quote_smart($register_flag),quote_smart($time));
 	$result_flag = mysql_query($sql);
 	if(!$result_flag){
 		die('INSERTクエリが失敗しました。'.mysql_error());
 	}
+	mail_send($id,$mail);
 }
 
 function extend_db(){
+	//登録フラグには仮登録のときに０、本登録のときに１を入れる。
 	$sql = "ALTER TABLE user_data ADD (Adress char(50), Register_flag char(100),Time char(50))";
 	$result_flag = mysql_query($sql);
 	if (!$result_flag) {
 		echo "カラムの追加に失敗しました。" .mysql_error();
 	}
 	return true;
+}
+function mail_send($id,$mail){
+	mb_language("Japanese");
+	mb_internal_encoding("UTF-8");
+	//$array = array( 'ID'=> $id);
+	if (mb_send_mail($mail, "テストメール", "http://co-67.3919.com/kadai3/kadai3-4_url.php/?".$id, "From: masashi3331524@gmail.com")) {
+		 echo "メールが送信されました。";
+	} else {
+  	echo "メールの送信に失敗しました。";
+	}
 }
 
 ?>
