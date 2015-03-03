@@ -1,0 +1,58 @@
+仕様書
+Smartyの導入と利用
+	１smartyをインストールし、使用できる状態にする
+	２smartyを用いて、phpとhtmlを分離する
+
+設計書
+	１smartyをhttp://www.smarty.net/のサイトからダウンロードする
+	ダウンロードファイルの名前をsmartyに変更
+	php.iniファイルを開いて、include_pathを検索
+	既に設定されている値の最後にsmartyフォルダのlibsまでのパスを通す
+	２
+	ディレクトリを構成する
+		プログラム部分
+			webサーバー経由でアクセス可能な場所に配置しないといけない
+			具体的にはhttp://co-67.3919.com/kadai4/にsmarty_programというディレクトリを作成
+			その下にseparateディレクトリを作成
+		デザイン部分
+			http://co-67.3919.com/kadai4/にsmarty_designというディレクトリを作成
+			その下に
+			templates     テンプレートファイル設置
+			templates_c   コンパイルしたテンプレート設置
+			configs       コンフィグファイル設置
+			cache         キャッシュ
+			という4つのフォルダを作成
+	テンプレートファイルの作成
+		テンプレートファイルを作成する。
+		ex)
+		{* Smarty Test *}
+		<html>
+		<head>
+		<title>Smarty Test</title>
+		</head>
+		<body>
+
+		<h1>{$msg}</h2>
+		拡張子はtplとして保存する。保存場所はtemplatesに保存
+	プログラムファイルの作成
+	ex)
+	<?php
+
+	require_once('Smarty.class.php');
+
+	$smarty = new Smarty();
+
+	$smarty->template_dir = 'd:/smartysample/hello/templates/';
+	$smarty->compile_dir  = 'd:/smartysample/hello/templates_c/';
+	$smarty->config_dir   = 'd:/smartysample/hello/configs/';
+	$smarty->cache_dir    = 'd:/smartysample/hello/cache/';
+
+	$smarty->assign('msg','Hello World!');
+	$smarty->display('sample.tpl');
+
+	?>
+	保存場所はsmarty_programの下に保存
+
+</body>
+</html>
+
