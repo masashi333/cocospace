@@ -1,0 +1,103 @@
+仕様書
+ユーザーエージェント判別
+	１ユーザーがアクセスしてきた端末情報を取得する。
+	２取得した端末情報から、PC,携帯（フィーチャーフォン）、スマートフォンでそれぞれに合ったデザインを表示する。
+
+設計書
+	１ユーザーがアクセスしてきた情報を$ua = $_SERVER['HTTP_USER_AGENT']で検出する。
+	strops関数で文字を認識する
+	ex)
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	if ((strpos($ua, 'Android') !== false) && (strpos($ua, 'Mobile') !== false) || (strpos($ua, 'iPhone') !== false) || (strpos($ua, 'Windows Phone') !== false)) {
+	// スマートフォンからアクセスされた場合
+	header("Location: smartphone/index.html");
+	exit();
+
+	} elseif ((strpos($ua, 'Android') !== false) || (strpos($ua, 'iPad') !== false)) {
+	// タブレットからアクセスされた場合
+	header("Location: tablet/index.html");
+	exit();
+
+	} elseif ((strpos($ua, 'DoCoMo') !== false) || (strpos($ua, 'KDDI') !== false) || (strpos($ua, 'SoftBank') !== false) || (strpos($ua, 'Vodafone') !== false) || (strpos($ua, 'J-PHONE') !== false)) {
+	// 携帯からアクセスされた場合
+	header("Location: mobile/index.html");
+	exit();
+
+	} else {
+	// その他（PC）からアクセスされた場合
+	header("Location: pc/index.html");
+	exit();
+	}
+	２レスポンシブwebデザインを用いて端末ごとにデザインを変える。
+	htmlのmetaに以下を記載する
+	<meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1" />
+	<link rel="stylesheet" media="all" type="text/css" href="style.css" />
+	<!-- ※デフォルトのスタイル（style.css） -->
+	<link rel="stylesheet" media="all" type="text/css" href="tablet.css" />
+	<!-- ※タブレット用のスタイル（tablet.css） -->
+	<link rel="stylesheet" media="all" type="text/css" href="smart.css" />
+	<!-- ※スマートフォン用のスタイル（smart.css） -->
+
+	スタイルシートを用意する
+	/*===============================================
+	●style.css 画面の横幅が769px以上
+	===============================================*/
+	@media screen and (min-width: 769px){
+	img{
+	max-width: 100%;
+	height: auto;
+	width /***/:auto;　
+	}
+	#container{
+	width:100%;
+	}
+	～以下、画面の横幅が768pxまでの場合のスタイル記入～
+	}
+	/*===============================================
+	●tablet.css 画面の横幅が768pxまで
+	===============================================*/
+	@media screen and (max-width: 768px){
+	img{
+	max-width: 100%;
+	height: auto;
+	width /***/:auto;　
+	}
+	#container{
+	width:100%;
+	}
+	～以下、画面の横幅が768pxまでの場合のスタイル記入～
+	}
+	/*===============================================
+	●smart.css  画面の横幅が640pxまで
+	===============================================*/
+	@media screen and (max-width:640px){
+	img{
+	max-width: 100%;
+	height: auto;
+	width /***/:auto;　
+	}
+	#container{
+	width:100%;
+	}
+	～以下、画面の横幅が640pxまでの場合のスタイル記入～
+	}
+	また、@importで各CSSを読み込む方法もあります。
+	@import url(style.css) screen and (min-width: 769px);
+	@import url(tablet.css) screen and (max-width: 768px);
+	@import url(smart.css) screen and (max-width: 640px);
+	画像の伸縮設定はスマートフォンやタブレット用に用いる。
+	img{
+	max-width: 100%;
+	height: auto;
+	width /***/:auto;　
+	}
+
+サイト構成
+	以前の課題で作った簡易掲示板と同じ
+
+システム構成
+	以前の課題で作った簡易掲示板と同じ
+
+スケジュール
+	1 30分程度
+	2 1時間程度

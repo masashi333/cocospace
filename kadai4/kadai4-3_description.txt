@@ -1,0 +1,46 @@
+仕様書
+キャッシュの利用
+	１ページにアクセスがされた時にキャッシュを生成する。（キャッシュライト等のライブラリを利用）
+	２2回目以降のアクセスページでページを表示する場合は生成されたキャッシュで表示を行うようにする。
+
+設計書
+以下のようなプログラムを用いるとキャッシュを利用できる。
+
+	// クラス読み込み
+require_once('Cache/Lite.php');
+// IDのセット
+$cache_id = '123456';
+// オプション
+$options = array(
+    'cacheDir'               => '/tmp/',
+    'caching'                => 'true',    // キャッシュを有効に
+    'automaticSerialization' => 'true',    // 配列を保存可能に
+    'lifeTime'                 => 1800,    // 60*30（生存時間：30分）
+    'automaticCleaningFactor' => 200,    // 自動で古いファイルを削除（1/200の確率で実行）
+    'hashedDirectoryLevel'    => 1,        // ディレクトリ階層の深さ（高速になる）
+);
+// オブジェクトのnew
+$cache=new Cache_Lite($options);
+// キャッシュデータがあるかどうかの判別
+if( $cache_data=$cache->get($cache_id) ){
+    $buff = $cache_data;
+}
+else{
+    // キャッシュデータがない。DBからデータを読み込む処理
+    // データ取得処理ここから
+    // ……………………… $read_data にデータを入れておく
+    // データ取得処理ここまで
+    $buff = $read_data;
+    $cache->save($buff);
+}
+print_r($buff);
+
+
+サイト構成
+	以前の課題で作った簡易掲示板と同じ
+
+システム構成
+	以前の課題で作った簡易掲示板と同じ
+
+スケジュール
+1時間程度
