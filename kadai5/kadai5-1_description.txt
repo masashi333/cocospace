@@ -1,0 +1,23 @@
+仕様書
+JavaScript課題
+	divタグにCSS(margin,padding,border,height,width,background等)を適用して色々なボタンとかボックスをつくる。
+
+設計書
+	CSSファイルを書く。
+	CSSで指定するパラーメータ例を示す。
+		font-size:12px;　文字の大きさ
+		color:#FF9900 テキストの色指定
+		background-color:#FFFF99　テキストの背景に色を指定
+		padding 内側に余白を作る
+		margin 外側に余白を作る
+		padding: 10px 5px 10px 30px　上下左右に個別指定
+		text-aling: center 文章の配置を指定
+		auto 中央に自動調整
+
+サイト構成
+	1つのページにボタンやボックスを2つずつ配置する。
+
+システム構成
+	ユーザーにサーバーで処理したhtmlページを表示する。
+
+スケジュール
